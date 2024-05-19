@@ -44,4 +44,14 @@ public class NamedEntity{
     public void setTopics(String[] topics) {
         Topics = topics;
     }
+
+    public boolean containsKeyword(String actKey){
+        for (int i = 0; i < keywords.length; i++) {
+            if(keywords[i] == actKey){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

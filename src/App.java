@@ -4,15 +4,12 @@ import java.util.List;
 
 import feed.*;
 import namedEntities.NamedEntity;
-import namedEntities.heuristics.CapitalizedWordHeuristic;
-import utils.Config;
-import utils.FeedsData;
-import utils.JSONParser;
-import utils.UserInterface;
+import namedEntities.heuristics.PrepositionHeuristic;
+import utils.*;
 
 public class App {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         List<FeedsData> feedsDataArray = new ArrayList<>();
         try {
@@ -29,7 +26,7 @@ public class App {
     }
 
     // TODO: Change the signature of this function if needed
-    private static void run(Config config, List<FeedsData> feedsDataArray) {
+    private static void run(Config config, List<FeedsData> feedsDataArray) throws IOException {
 
         if (feedsDataArray == null || feedsDataArray.size() == 0) {
             System.out.println("No feeds data found");
@@ -42,7 +39,7 @@ public class App {
         for(var i=0; i < feedsDataArray.size(); ++i){
             try {
                 String feedUrl = FeedParser.fetchFeed(feedsDataArray.get(i).getUrl());
-                List<Article> actFeedArt = new ArrayList<>();
+                List<Article> actFeedArt;
                 actFeedArt = FeedParser.parseXML(feedUrl);
                 for (var j=0; j<actFeedArt.size(); ++j) {
                     allArticles.add(actFeedArt.get(j)); //Agrego todos los articulos de cada uno de los feeds en allArticles
@@ -60,18 +57,18 @@ public class App {
             }
         }
 
-        if (config.getComputeNamedEntities()) {
+        if (config.getComputeNamedEntities() == false) {
             // TODO: complete the message with the selected heuristic name
             System.out.println("Computing named entities using ");
 
             // TODO: compute named entities using the selected heuristic
-            List<NamedEntity> entity = new ArrayList<>();
+
             List<String> candidatesFrTitle;
             List<String> candidatesFrDescription;
             List<String> candidates = new ArrayList<>();
             for (int i = 0; i < allArticles.size(); i++) {
-                candidatesFrTitle = CapitalizedWordHeuristic.extractCandidates(allArticles.get(i).getTitle());
-                candidatesFrDescription = CapitalizedWordHeuristic.extractCandidates(allArticles.get(i).getTitle());
+                candidatesFrTitle = PrepositionHeuristic.extractCandidates(allArticles.get(i).getTitle());
+                candidatesFrDescription = PrepositionHeuristic.extractCandidates(allArticles.get(i).getTitle());
                 candidates.addAll(candidatesFrTitle);
                 candidates.addAll(candidatesFrDescription);
             }
@@ -81,13 +78,45 @@ public class App {
             // TODO: Print stats
             System.out.println("\nStats: ");
             System.out.println("-".repeat(80));
-            boolean isInDict;
+
+            List<NamedEntity> dictionaryEnt = JSONtoEntity.parseJsonEntity("src/data/dictionary.json");
+
+            //Creo una lista de entidades con cada una de los candidatos que aparecen en el dictionary
+            List<NamedEntity> entities = new ArrayList<>();
+
+
             for (int i = 0; i < candidates.size(); i++) {
 
-                //if(){
+                for (int j = 0; j < dictionaryEnt.size(); j++) {
 
-                //}
+                    NamedEntity actDictEnt = dictionaryEnt.get(j);
+
+                    if(actDictEnt.containsKeyword(candidates.get(i))){
+                        NamedEntity entity = new NamedEntity();
+
+                        switch (actDictEnt.getCategory()){
+                            case "LOCATION":
+                                entity.setCategory("LOCATION");
+                                break;
+                            case "ORGANIZATION":
+                                entity.setCategory("ORGANIZATION");
+                                break;
+                            case "PERSON":
+                                entity.setCategory("PERSON");
+                                break;
+                            default:
+                                entity.setCategory("OTHER");
+                        }
+
+                        entity.setKeywords(actDictEnt.getKeywords());
+                        entity.setTopics(actDictEnt.getTopics());
+                        entity.setLabel(actDictEnt.getLabel());
+
+                        entities.add(entity);
+                    }
+                }
             }
+            //Ya creamos la nueva entidad con los candidatos que aparecen en el dictionary
 
 
         }
