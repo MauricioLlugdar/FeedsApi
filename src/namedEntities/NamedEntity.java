@@ -1,8 +1,17 @@
 package namedEntities;
 
 public class NamedEntity{
-    private String label, Category, keywords;
-    private String[] Topics;
+    private String label, Category;
+    private String[] Topics, keywords;
+
+    public NamedEntity(){};
+
+    public NamedEntity(String label, String Category, String[] Topics, String[] keywords){
+        this.label =label;
+        this.Category = Category;
+        this.Topics = Topics;
+        this.keywords = keywords;
+    };
 
     public String getLabel() {
         return label;
@@ -20,11 +29,11 @@ public class NamedEntity{
         Category = category;
     }
 
-    public String getKeywords() {
+    public String[] getKeywords() {
         return keywords;
     }
 
-    public void setKeywords(String keywords) {
+    public void setKeywords(String[] keywords) {
         this.keywords = keywords;
     }
 
