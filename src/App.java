@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import feed.Article;
+import feed.*;
 import utils.Config;
 import utils.FeedsData;
 import utils.JSONParser;
@@ -37,9 +37,25 @@ public class App {
         List<Article> allArticles = new ArrayList<>();
         // TODO: Populate allArticles with articles from corresponding feeds
 
+        for(var i=0; i < feedsDataArray.size(); ++i){
+            try {
+                String feedUrl = FeedParser.fetchFeed(feedsDataArray.get(i).getUrl());
+                List<Article> actFeedArt = new ArrayList<>();
+                actFeedArt = FeedParser.parseXML(feedUrl);
+                for (var j=0; j<actFeedArt.size(); ++j) {
+                    allArticles.add(actFeedArt.get(j)); //Agrego todos los articulos de cada uno de los feeds en allArticles
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        };
+
+
         if (config.getPrintFeed()) {
             System.out.println("Printing feed(s) ");
-            // TODO: Print the fetched feed
+            for(var i = 0; i < allArticles.size(); ++i){
+                System.out.println(allArticles.get(i).print());
+            }
         }
 
         if (config.getComputeNamedEntities()) {
