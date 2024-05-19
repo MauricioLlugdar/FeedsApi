@@ -81,8 +81,12 @@ public class App {
 
             List<NamedEntity> dictionaryEnt = JSONtoEntity.parseJsonEntity("src/data/dictionary.json");
 
-            //Creo una lista de entidades con cada una de los candidatos que aparecen en el dictionary
-            List<NamedEntity> entities = new ArrayList<>();
+            //Creo una lista de entidades por cada Categoria
+
+            List<String> locationEntities = new ArrayList<>();
+            List<String> personEntities = new ArrayList<>();
+            List<String> organizationEntities = new ArrayList<>();
+            List<String> otherEntities = new ArrayList<>();
 
 
             for (int i = 0; i < candidates.size(); i++) {
@@ -92,32 +96,26 @@ public class App {
                     NamedEntity actDictEnt = dictionaryEnt.get(j);
 
                     if(actDictEnt.containsKeyword(candidates.get(i))){
-                        NamedEntity entity = new NamedEntity();
 
                         switch (actDictEnt.getCategory()){
                             case "LOCATION":
-                                entity.setCategory("LOCATION");
+                                locationEntities.add(actDictEnt.getLabel());
                                 break;
                             case "ORGANIZATION":
-                                entity.setCategory("ORGANIZATION");
+                                organizationEntities.add(actDictEnt.getLabel());
                                 break;
                             case "PERSON":
-                                entity.setCategory("PERSON");
+                                personEntities.add(actDictEnt.getLabel());
                                 break;
                             default:
-                                entity.setCategory("OTHER");
+                                otherEntities.add(actDictEnt.getLabel());
                         }
-
-                        entity.setKeywords(actDictEnt.getKeywords());
-                        entity.setTopics(actDictEnt.getTopics());
-                        entity.setLabel(actDictEnt.getLabel());
-
-                        entities.add(entity);
                     }
                 }
             }
-            //Ya creamos la nueva entidad con los candidatos que aparecen en el dictionary
 
+            //Ya creamos las listas con los nombres de cada candidato que existe en el dict separados por categoria
+            
 
         }
     }
