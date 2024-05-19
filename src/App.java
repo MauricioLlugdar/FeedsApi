@@ -82,11 +82,16 @@ public class App {
             List<NamedEntity> dictionaryEnt = JSONtoEntity.parseJsonEntity("src/data/dictionary.json");
 
             //Creo una lista de entidades por cada Categoria
+            class CandAndApp{
+                public String candidate;
+                public Integer appeareances = 0;
 
-            List<String> locationEntities = new ArrayList<>();
-            List<String> personEntities = new ArrayList<>();
-            List<String> organizationEntities = new ArrayList<>();
-            List<String> otherEntities = new ArrayList<>();
+            }
+
+            List<CandAndApp> locationEntities = new ArrayList<>();
+            List<CandAndApp> personEntities = new ArrayList<>();
+            List<CandAndApp> organizationEntities = new ArrayList<>();
+            List<CandAndApp> otherEntities = new ArrayList<>();
 
 
             for (int i = 0; i < candidates.size(); i++) {
@@ -97,25 +102,34 @@ public class App {
 
                     if(actDictEnt.containsKeyword(candidates.get(i))){
 
+                        CandAndApp actCandApp = new CandAndApp();
+                        actCandApp.candidate = actDictEnt.getLabel();
+                        actCandApp.appeareances++;
+
                         switch (actDictEnt.getCategory()){
                             case "LOCATION":
-                                locationEntities.add(actDictEnt.getLabel());
+                                locationEntities.add(actCandApp);
                                 break;
                             case "ORGANIZATION":
-                                organizationEntities.add(actDictEnt.getLabel());
+                                organizationEntities.add(actCandApp);
                                 break;
                             case "PERSON":
-                                personEntities.add(actDictEnt.getLabel());
+                                personEntities.add(actCandApp);
                                 break;
                             default:
-                                otherEntities.add(actDictEnt.getLabel());
+                                otherEntities.add(actCandApp);
                         }
                     }
                 }
             }
 
             //Ya creamos las listas con los nombres de cada candidato que existe en el dict separados por categoria
-            
+
+            //Ahora printeamos cada una de los categorias con la cantidad de apariciones de cada candidato
+            System.out.println("Category: ORGANIZATION");
+            for (int i = 0; i < organizationEntities.size(); i++) {
+
+            }
 
         }
     }
