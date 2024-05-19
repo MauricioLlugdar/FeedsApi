@@ -7,7 +7,7 @@ import java.util.regex.*;
 
 public class PreviousWordHeuristic {
     //Usando texto previo como " en la (Primera letra mayuscula)" podemos darnos cuenta que la palabra con mayuscula es un lugar"
-    public List<String> extractCandidates(String text) {
+    public static List<String> extractCandidates(String text) {
         List<String> candidates = new ArrayList<>();
 
         text = text.replaceAll("[-+.^:,\"]", "");

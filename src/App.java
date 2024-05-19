@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import feed.*;
+import namedEntities.NamedEntity;
+import namedEntities.heuristics.CapitalizedWordHeuristic;
 import utils.Config;
 import utils.FeedsData;
 import utils.JSONParser;
@@ -63,10 +65,24 @@ public class App {
             System.out.println("Computing named entities using ");
 
             // TODO: compute named entities using the selected heuristic
+            List<NamedEntity> entity = new ArrayList<>();
+            List<String> candidatesFrTitle;
+            List<String> candidatesFrDescription;
+            List<String> candidates = new ArrayList<>();
+            for (int i = 0; i < allArticles.size(); i++) {
+                candidatesFrTitle = CapitalizedWordHeuristic.extractCandidates(allArticles.get(i).getTitle());
+                candidatesFrDescription = CapitalizedWordHeuristic.extractCandidates(allArticles.get(i).getTitle());
+                candidates.addAll(candidatesFrTitle);
+                candidates.addAll(candidatesFrDescription);
+            }
+
+            System.out.println("Number of candidates of all Articles : \n" + candidates.size());
 
             // TODO: Print stats
             System.out.println("\nStats: ");
             System.out.println("-".repeat(80));
+
+
         }
     }
 

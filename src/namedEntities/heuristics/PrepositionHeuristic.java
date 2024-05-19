@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.regex.*;
 
 public class PrepositionHeuristic {
-    public List<String> extractCandidates(String text) {
+    public static List<String> extractCandidates(String text) {
+
         //Si hay preposicion a, ante, bajo, cabe, ... . Y con esto al siguiente nombre propio lo detectamos como una palabra de interes
         List<String> candidates = new ArrayList<>();
 

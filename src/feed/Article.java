@@ -14,6 +14,22 @@ public class Article {
         this.title = title;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getPubDate() {
+        return pubDate;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
