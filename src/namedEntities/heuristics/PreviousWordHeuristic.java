@@ -14,7 +14,7 @@ public class PreviousWordHeuristic {
         text = Normalizer.normalize(text, Normalizer.Form.NFD);
         text = text.replaceAll("\\p{M}", "");
 
-        Pattern pattern = Pattern.compile("\\b(?:el|la|los|las|un|una|unos|unas|Sr|Sra|Dr|Dra|Prof)\\s+[A-Z][a-z]*\\b");
+        Pattern pattern = Pattern.compile("(?<=\\b(?:el|la|los|las|un|una|unos|unas|Sr|Sra|Dr|Dra|Prof))\\s+[A-Z][a-z]*\\b");
         //https://docs.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html ?: significa que no captura ese grupo, ya q no lo necesitamos realmente
         Matcher matcher = pattern.matcher(text);
 
