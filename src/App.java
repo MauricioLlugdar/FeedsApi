@@ -81,6 +81,13 @@ public class App {
             // TODO: Print stats
             System.out.println("\nStats: ");
             System.out.println("-".repeat(80));
+            boolean isInDict;
+            for (int i = 0; i < candidates.size(); i++) {
+
+                //if(){
+
+                //}
+            }
 
 
         }
