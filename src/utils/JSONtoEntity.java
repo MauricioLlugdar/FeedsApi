@@ -32,8 +32,8 @@ public class JSONtoEntity {
             }
 
             JSONArray keywordsArrayJson = jsonObject.getJSONArray("keywords");
-            String[] keywordsArray = new String[TopicsArrayJson.length()];
-            for (int j = 0; j < TopicsArrayJson.length(); j++) {
+            String[] keywordsArray = new String[keywordsArrayJson.length()];
+            for (int j = 0; j < keywordsArrayJson.length(); j++) {
                 keywordsArray[j] = keywordsArrayJson.get(j).toString();
             }
 

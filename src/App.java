@@ -1,10 +1,12 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import feed.*;
 import namedEntities.NamedEntity;
-import namedEntities.heuristics.PrepositionHeuristic;
+import namedEntities.heuristics.CapitalizedWordHeuristic;
 import utils.*;
 
 public class App {
@@ -67,8 +69,8 @@ public class App {
             List<String> candidatesFrDescription;
             List<String> candidates = new ArrayList<>();
             for (int i = 0; i < allArticles.size(); i++) {
-                candidatesFrTitle = PrepositionHeuristic.extractCandidates(allArticles.get(i).getTitle());
-                candidatesFrDescription = PrepositionHeuristic.extractCandidates(allArticles.get(i).getTitle());
+                candidatesFrTitle = CapitalizedWordHeuristic.extractCandidates(allArticles.get(i).getTitle());
+                candidatesFrDescription = CapitalizedWordHeuristic.extractCandidates(allArticles.get(i).getTitle());
                 candidates.addAll(candidatesFrTitle);
                 candidates.addAll(candidatesFrDescription);
             }
@@ -81,54 +83,101 @@ public class App {
 
             List<NamedEntity> dictionaryEnt = JSONtoEntity.parseJsonEntity("src/data/dictionary.json");
 
-            //Creo una lista de entidades por cada Categoria
-            class CandAndApp{
-                public String candidate;
-                public Integer appeareances = 0;
+            System.out.println("Number of dictionary of elements : \n" + dictionaryEnt.size());
+            //System.out.println(dictionaryEnt.get(0).getLabel());
+            //dictionaryEnt.get(0).printKeywords(dictionaryEnt.get(0).getKeywords());
 
-            }
-
-            List<CandAndApp> locationEntities = new ArrayList<>();
-            List<CandAndApp> personEntities = new ArrayList<>();
-            List<CandAndApp> organizationEntities = new ArrayList<>();
-            List<CandAndApp> otherEntities = new ArrayList<>();
+            HashMap<String, Integer> locationEntities = new HashMap<String, Integer>();
+            HashMap<String, Integer> personEntities = new HashMap<String, Integer>();
+            HashMap<String, Integer> organizationEntities = new HashMap<String, Integer>();
+            HashMap<String, Integer> otherEntities = new HashMap<String, Integer>();
+            HashMap<String, Integer> eventEntities = new HashMap<String, Integer>();
 
 
             for (int i = 0; i < candidates.size(); i++) {
-
                 for (int j = 0; j < dictionaryEnt.size(); j++) {
 
                     NamedEntity actDictEnt = dictionaryEnt.get(j);
-
+                    String actKey = actDictEnt.getLabel();
+                    Integer actValue;
                     if(actDictEnt.containsKeyword(candidates.get(i))){
-
-                        CandAndApp actCandApp = new CandAndApp();
-                        actCandApp.candidate = actDictEnt.getLabel();
-                        actCandApp.appeareances++;
-
                         switch (actDictEnt.getCategory()){
                             case "LOCATION":
-                                locationEntities.add(actCandApp);
+                                if(locationEntities.containsKey(actDictEnt.getLabel())){
+                                    actValue = locationEntities.get(actKey);
+                                    locationEntities.replace(actKey, actValue, actValue+1);
+                                }else {
+                                    locationEntities.put(actKey, 1);
+                                }
                                 break;
                             case "ORGANIZATION":
-                                organizationEntities.add(actCandApp);
+                                if(organizationEntities.containsKey(actDictEnt.getLabel())){
+                                    actValue = organizationEntities.get(actKey);
+                                    organizationEntities.replace(actKey, actValue, actValue+1);
+                                }else {
+                                    organizationEntities.put(actKey, 1);
+                                }
                                 break;
                             case "PERSON":
-                                personEntities.add(actCandApp);
+                                if(personEntities.containsKey(actDictEnt.getLabel())){
+                                    actValue = personEntities.get(actKey);
+                                    personEntities.replace(actKey, actValue, actValue+1);
+                                }else {
+                                    personEntities.put(actKey, 1);
+                                }
                                 break;
-                            default:
-                                otherEntities.add(actCandApp);
+                            case "EVENT":
+                                if(eventEntities.containsKey(actDictEnt.getLabel())){
+                                    actValue = eventEntities.get(actKey);
+                                    eventEntities.replace(actKey, actValue, actValue+1);
+                                }else {
+                                    eventEntities.put(actKey, 1);
+                                }
+                                break;
+                            case "OTHER":
+                                if(otherEntities.containsKey(actDictEnt.getLabel())){
+                                    actValue = otherEntities.get(actKey);
+                                    otherEntities.replace(actKey, actValue, actValue+1);
+                                }else {
+                                    otherEntities.put(actKey, 1);
+                                }
+
                         }
                     }
                 }
-            }
 
+            }
             //Ya creamos las listas con los nombres de cada candidato que existe en el dict separados por categoria
 
             //Ahora printeamos cada una de los categorias con la cantidad de apariciones de cada candidato
             System.out.println("Category: ORGANIZATION");
-            for (int i = 0; i < organizationEntities.size(); i++) {
 
+            for (Map.Entry<String, Integer> orgElem : organizationEntities.entrySet()) {
+                System.out.println("    " + orgElem.getKey() + " (" + orgElem.getValue() + ")\n");
+            }
+
+            System.out.println("Category: LOCATION");
+
+            for (Map.Entry<String, Integer> locElem : locationEntities.entrySet()) {
+                System.out.println("    " + locElem.getKey() + " (" + locElem.getValue() + ")\n");
+            }
+
+            System.out.println("Category: OTHER");
+
+            for (Map.Entry<String, Integer> othElem : otherEntities.entrySet()) {
+                System.out.println("    " + othElem.getKey() + " (" + othElem.getValue() + ")\n");
+            }
+
+            System.out.println("Category: PERSON");
+
+            for (Map.Entry<String, Integer> perElem : personEntities.entrySet()) {
+                System.out.println("    " + perElem.getKey() + " (" + perElem.getValue() + ")\n");
+            }
+
+            System.out.println("Category: EVENT");
+
+            for (Map.Entry<String, Integer> evElem : eventEntities.entrySet()) {
+                System.out.println("    " + evElem.getKey() + " (" + evElem.getValue() + ")\n");
             }
 
         }

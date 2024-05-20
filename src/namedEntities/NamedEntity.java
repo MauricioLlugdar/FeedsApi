@@ -37,6 +37,12 @@ public class NamedEntity{
         this.keywords = keywords;
     }
 
+    public void printKeywords(String[] keywords){
+        for (int i = 0; i < keywords.length; i++) {
+            System.out.println(keywords[i]);
+        }
+    }
+
     public String[] getTopics() {
         return Topics;
     }
@@ -46,8 +52,8 @@ public class NamedEntity{
     }
 
     public boolean containsKeyword(String actKey){
-        for (int i = 0; i < keywords.length; i++) {
-            if(keywords[i] == actKey){
+        for (int i = 0; i < this.keywords.length; i++) {
+            if(this.keywords[i].trim().equalsIgnoreCase(actKey.trim())){
                 return true;
             }
         }
