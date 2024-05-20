@@ -7,6 +7,8 @@ import java.util.Map;
 import feed.*;
 import namedEntities.NamedEntity;
 import namedEntities.heuristics.CapitalizedWordHeuristic;
+import namedEntities.heuristics.PrepositionHeuristic;
+import namedEntities.heuristics.PreviousWordHeuristic;
 import utils.*;
 
 public class App {
@@ -70,11 +72,10 @@ public class App {
             List<String> candidates = new ArrayList<>();
             for (int i = 0; i < allArticles.size(); i++) {
                 candidatesFrTitle = CapitalizedWordHeuristic.extractCandidates(allArticles.get(i).getTitle());
-                candidatesFrDescription = CapitalizedWordHeuristic.extractCandidates(allArticles.get(i).getTitle());
+                candidatesFrDescription = CapitalizedWordHeuristic.extractCandidates(allArticles.get(i).getDescription());
                 candidates.addAll(candidatesFrTitle);
                 candidates.addAll(candidatesFrDescription);
             }
-
             System.out.println("Number of candidates of all Articles : \n" + candidates.size());
 
             // TODO: Print stats
@@ -95,11 +96,12 @@ public class App {
 
 
             for (int i = 0; i < candidates.size(); i++) {
-                for (int j = 0; j < dictionaryEnt.size(); j++) {
 
+                for (int j = 0; j < dictionaryEnt.size(); j++) {
                     NamedEntity actDictEnt = dictionaryEnt.get(j);
                     String actKey = actDictEnt.getLabel();
                     Integer actValue;
+                    //System.out.println(actDictEnt.getLabel());
                     if(actDictEnt.containsKeyword(candidates.get(i))){
                         switch (actDictEnt.getCategory()){
                             case "LOCATION":
