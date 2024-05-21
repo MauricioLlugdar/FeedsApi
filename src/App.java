@@ -6,8 +6,6 @@ import java.util.Map;
 
 import feed.*;
 import namedEntities.NamedEntity;
-import namedEntities.heuristics.CapitalizedWordHeuristic;
-import namedEntities.heuristics.PrepositionHeuristic;
 import namedEntities.heuristics.PreviousWordHeuristic;
 import utils.*;
 
@@ -42,7 +40,7 @@ public class App {
         String feedUrl = "";
         List<Article> articlesFeed;
         Boolean fParam = true;
-        System.out.println(config.getFeedKey());
+        
         switch (config.getFeedKey()) {
             case "p12pais":
                 try {
@@ -114,7 +112,7 @@ public class App {
                 candidates.addAll(candidatesFrTitle);
                 candidates.addAll(candidatesFrDescription);
             }
-            System.out.println("Number of candidates of all Articles : \n" + candidates.size());
+            //System.out.println("Number of candidates of all Articles : \n" + candidates.size());
 
             // TODO: Print stats
             System.out.println("\nStats: ");
@@ -122,103 +120,40 @@ public class App {
 
             List<NamedEntity> dictionaryEnt = JSONtoEntity.parseJsonEntity("src/data/dictionary.json");
 
-            //System.out.println(dictionaryEnt.get(0).getLabel());
-            //dictionaryEnt.get(0).printKeywords(dictionaryEnt.get(0).getKeywords());
+            //Divido por categorias
+            HashMap<String, Integer> locationCategory = new HashMap<String, Integer>();
+            HashMap<String, Integer> personCategory = new HashMap<String, Integer>();
+            HashMap<String, Integer> organizationCategory = new HashMap<String, Integer>();
+            HashMap<String, Integer> otherCategory = new HashMap<String, Integer>();
+            HashMap<String, Integer> eventCategory = new HashMap<String, Integer>();
+            //Divido por topicos
+            HashMap<String, Integer> politicsTopic = new HashMap<String, Integer>();
+            HashMap<String, Integer> sportsTopic = new HashMap<String, Integer>();
+            HashMap<String, Integer> economyTopic = new HashMap<String, Integer>();
+            HashMap<String, Integer> healthTopic = new HashMap<String, Integer>();
+            HashMap<String, Integer> technoTopic = new HashMap<String, Integer>();
+            HashMap<String, Integer> cultureTopic = new HashMap<String, Integer>();
+            HashMap<String, Integer> otherTopic = new HashMap<String, Integer>();
 
-            HashMap<String, Integer> locationEntities = new HashMap<String, Integer>();
-            HashMap<String, Integer> personEntities = new HashMap<String, Integer>();
-            HashMap<String, Integer> organizationEntities = new HashMap<String, Integer>();
-            HashMap<String, Integer> otherEntities = new HashMap<String, Integer>();
-            HashMap<String, Integer> eventEntities = new HashMap<String, Integer>();
+            String orderOfStats = config.getStatFormat();
 
+            switch (orderOfStats){
+                case "topic":
+                    FillForStats.topicsForStats(candidates, dictionaryEnt, politicsTopic, sportsTopic, economyTopic, healthTopic, technoTopic, cultureTopic, otherTopic);
 
-            for (int i = 0; i < candidates.size(); i++) {
+                    //Printeamos las estadisticas por Topico
+                    PrintStats.printTopicsStats(politicsTopic, sportsTopic, economyTopic, healthTopic, technoTopic, cultureTopic, otherTopic);
+                    break;
+                default:
+                    //Filling category for Stats
+                    FillForStats.categoryForStats(candidates,dictionaryEnt,locationCategory,personCategory,organizationCategory,otherCategory,eventCategory);
 
-                for (int j = 0; j < dictionaryEnt.size(); j++) {
-                    NamedEntity actDictEnt = dictionaryEnt.get(j);
-                    String actKey = actDictEnt.getLabel();
-                    Integer actValue;
-                    //System.out.println(actDictEnt.getLabel());
-                    if(actDictEnt.containsKeyword(candidates.get(i))){
-                        switch (actDictEnt.getCategory()){
-                            case "LOCATION":
-                                if(locationEntities.containsKey(actDictEnt.getLabel())){
-                                    actValue = locationEntities.get(actKey);
-                                    locationEntities.replace(actKey, actValue, actValue+1);
-                                }else {
-                                    locationEntities.put(actKey, 1);
-                                }
-                                break;
-                            case "ORGANIZATION":
-                                if(organizationEntities.containsKey(actDictEnt.getLabel())){
-                                    actValue = organizationEntities.get(actKey);
-                                    organizationEntities.replace(actKey, actValue, actValue+1);
-                                }else {
-                                    organizationEntities.put(actKey, 1);
-                                }
-                                break;
-                            case "PERSON":
-                                if(personEntities.containsKey(actDictEnt.getLabel())){
-                                    actValue = personEntities.get(actKey);
-                                    personEntities.replace(actKey, actValue, actValue+1);
-                                }else {
-                                    personEntities.put(actKey, 1);
-                                }
-                                break;
-                            case "EVENT":
-                                if(eventEntities.containsKey(actDictEnt.getLabel())){
-                                    actValue = eventEntities.get(actKey);
-                                    eventEntities.replace(actKey, actValue, actValue+1);
-                                }else {
-                                    eventEntities.put(actKey, 1);
-                                }
-                                break;
-                            case "OTHER":
-                                if(otherEntities.containsKey(actDictEnt.getLabel())){
-                                    actValue = otherEntities.get(actKey);
-                                    otherEntities.replace(actKey, actValue, actValue+1);
-                                }else {
-                                    otherEntities.put(actKey, 1);
-                                }
-
-                        }
-                    }
-                }
-
+                    //Printeamos las estadisticas por Categoria
+                    PrintStats.printCategoryStats(locationCategory,personCategory,organizationCategory,otherCategory,eventCategory);
+                    break;
             }
-            //Ya creamos las listas con los nombres de cada candidato que existe en el dict separados por categoria
 
-            //Ahora printeamos cada una de los categorias con la cantidad de apariciones de cada candidato
-            System.out.println("Category: ORGANIZATION");
 
-            for (Map.Entry<String, Integer> orgElem : organizationEntities.entrySet()) {
-                System.out.println("    " + orgElem.getKey() + " (" + orgElem.getValue() + ")");
-            }
-            System.out.println();
-            System.out.println("Category: LOCATION");
-
-            for (Map.Entry<String, Integer> locElem : locationEntities.entrySet()) {
-                System.out.println("    " + locElem.getKey() + " (" + locElem.getValue() + ")");
-            }
-            System.out.println();
-            System.out.println("Category: OTHER");
-
-            for (Map.Entry<String, Integer> othElem : otherEntities.entrySet()) {
-                System.out.println("    " + othElem.getKey() + " (" + othElem.getValue() + ")");
-            }
-            System.out.println();
-            System.out.println("Category: PERSON");
-
-            for (Map.Entry<String, Integer> perElem : personEntities.entrySet()) {
-                System.out.println("    " + perElem.getKey() + " (" + perElem.getValue() + ")");
-            }
-            System.out.println();
-            System.out.println("Category: EVENT");
-
-            for (Map.Entry<String, Integer> evElem : eventEntities.entrySet()) {
-                System.out.println("    " + evElem.getKey() + " (" + evElem.getValue() + ")");
-            }
-            System.out.println();
         }
     }
 

@@ -17,24 +17,8 @@ public class NamedEntity{
         return label;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
     public String getCategory() {
         return Category;
-    }
-
-    public void setCategory(String category) {
-        Category = category;
-    }
-
-    public String[] getKeywords() {
-        return keywords;
-    }
-
-    public void setKeywords(String[] keywords) {
-        this.keywords = keywords;
     }
 
     public void printKeywords(String[] keywords){
@@ -45,10 +29,6 @@ public class NamedEntity{
 
     public String[] getTopics() {
         return Topics;
-    }
-
-    public void setTopics(String[] topics) {
-        Topics = topics;
     }
 
     public boolean containsKeyword(String actKey){

@@ -22,9 +22,6 @@ public class UserInterface {
     }
 
     public Config handleInput(String[] args) {
-        for(String arg : args){
-            System.out.println(arg);
-        }
         for (Integer i = 0; i < args.length; i++) {
             for (Option option : options) {
                 if (option.getName().equals(args[i]) || option.getLongName().equals(args[i])) {
@@ -34,7 +31,7 @@ public class UserInterface {
                         if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
                             optionDict.put(option.getName(), args[i + 1]);
                             System.out.println("Nombre en el optionDict: " + option.getName());
-                            System.out.println(optionDict.get(option.getName()));
+                            //System.out.println(optionDict.get(option.getName()));
                             i++;
                         } else {
                             System.out.println("Invalid inputs");
@@ -47,6 +44,8 @@ public class UserInterface {
 
         Boolean printFeed = optionDict.containsKey("-pf");
         Boolean computeNamedEntities = optionDict.containsKey("-ne");
+
+        Boolean statsFormat = optionDict.containsKey("-sf");
         // TODO: use value for heuristic config
         String heuristic = "";
         if (computeNamedEntities){
@@ -56,7 +55,12 @@ public class UserInterface {
         if(feedKey == null){
            feedKey = "all";
         }
+        //Actual stat format
+        String sf = "cat";
+        if(statsFormat){
+            sf = optionDict.get("-sf");
+        }
 
-        return new Config(printFeed, computeNamedEntities, feedKey, heuristic);
+        return new Config(printFeed, computeNamedEntities, feedKey, heuristic, sf);
     }
 }

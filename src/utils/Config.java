@@ -6,12 +6,14 @@ public class Config {
     private String feedKey;
     // TODO: A reference to the used heuristic will be needed here
     private String heuristic;
+    private String statFormat;
 
-    public Config(boolean printFeed, boolean computeNamedEntities, String feedKey, String heuristic) {
+    public Config(boolean printFeed, boolean computeNamedEntities, String feedKey, String heuristic, String statFormat) {
         this.printFeed = printFeed;
         this.computeNamedEntities = computeNamedEntities;
         this.feedKey = feedKey;
         this.heuristic = heuristic;
+        this.statFormat = statFormat;
     }
 
     public boolean getPrintFeed() {
@@ -26,6 +28,11 @@ public class Config {
         return feedKey;
     }
 
-    public String getHeuristic() { return heuristic; }
+    public String getHeuristic() {
+        return heuristic;
+    }
 
+    public String getStatFormat() {
+        return statFormat;
+    }
 }
