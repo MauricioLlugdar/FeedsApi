@@ -40,7 +40,7 @@ public class App {
         String feedUrl = "";
         List<Article> articlesFeed;
         Boolean fParam = true;
-        
+
         switch (config.getFeedKey()) {
             case "p12pais":
                 try {

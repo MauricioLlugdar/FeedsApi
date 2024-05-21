@@ -25,7 +25,7 @@ public class FeedParser {
             InputStream is = new ByteArrayInputStream(xmlData.getBytes("UTF-8")); // Obtenemos los bytes de xmlData para luego parsearlo
             Document doc = dBuilder.parse(is); // Parseo del InputStream creado en un Document
             NodeList nList = doc.getElementsByTagName("item"); // Obtenemos "nodos" a partir del documento, se crea un nodo por cada instancia de "item" que aparezca
-            articles = new ArrayList<Article>();
+            articles = new ArrayList<>();
 
             // Cada Nodo representa un artículo, se creará una instancia de Article en cada iteracion del for y se cargarán los datos correspondientes
             for (int nArt = 0; nArt < nList.getLength(); nArt++) {
