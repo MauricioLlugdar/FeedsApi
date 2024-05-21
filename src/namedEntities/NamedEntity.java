@@ -1,5 +1,7 @@
 package namedEntities;
 
+// Cada entidad nombrada que nosotros obtengamos de un artículo, irá clasificada por su label, categoria y topico. Y
+// también tendrá las keywords con las que se refieren a una misma entidad nombrada.
 public class NamedEntity{
     private String label, Category;
     private String[] Topics, keywords;
