@@ -39,20 +39,58 @@ public class App {
 
         List<Article> allArticles = new ArrayList<>();
         // TODO: Populate allArticles with articles from corresponding feeds
-
-        for(var i=0; i < feedsDataArray.size(); ++i){
-            try {
-                String feedUrl = FeedParser.fetchFeed(feedsDataArray.get(i).getUrl());
-                List<Article> actFeedArt;
-                actFeedArt = FeedParser.parseXML(feedUrl);
-                for (var j=0; j<actFeedArt.size(); ++j) {
-                    allArticles.add(actFeedArt.get(j)); //Agrego todos los articulos de cada uno de los feeds en allArticles
+        String feedUrl = "";
+        List<Article> articlesFeed;
+        Boolean fParam = true;
+        System.out.println(config.getFeedKey());
+        switch (config.getFeedKey()) {
+            case "p12pais":
+                try {
+                    feedUrl = FeedParser.fetchFeed(feedsDataArray.get(0).getUrl());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        };
+                break;
+            case "p12eco":
+                try {
+                    feedUrl = FeedParser.fetchFeed(feedsDataArray.get(1).getUrl());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case "lmgral:":
+                try {
+                    feedUrl = FeedParser.fetchFeed(feedsDataArray.get(2).getUrl());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            case "lmnoti":
+                try {
+                    feedUrl = FeedParser.fetchFeed(feedsDataArray.get(3).getUrl());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            case "all": //All feeds
+                fParam = false;
+                for (var i = 0; i < feedsDataArray.size(); ++i) {
+                    try {
+                        feedUrl = FeedParser.fetchFeed(feedsDataArray.get(i).getUrl());
+                        articlesFeed = FeedParser.parseXML(feedUrl);
+                        //Agrego todos los articulos de cada uno de los feeds en allArticles
+                        allArticles.addAll(articlesFeed);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                break;
+        }
 
+        if(fParam){
+            articlesFeed = FeedParser.parseXML(feedUrl);
+            //Agrego todos los articulos del feed en particular
+            allArticles.addAll(articlesFeed);
+        }
 
         if (config.getPrintFeed()) {
             System.out.println("Printing feed(s) ");
@@ -61,7 +99,7 @@ public class App {
             }
         }
 
-        if (config.getComputeNamedEntities() == false) {
+        if (config.getComputeNamedEntities()) {
             // TODO: complete the message with the selected heuristic name
             System.out.println("Computing named entities using ");
 
@@ -71,8 +109,8 @@ public class App {
             List<String> candidatesFrDescription;
             List<String> candidates = new ArrayList<>();
             for (int i = 0; i < allArticles.size(); i++) {
-                candidatesFrTitle = CapitalizedWordHeuristic.extractCandidates(allArticles.get(i).getTitle());
-                candidatesFrDescription = CapitalizedWordHeuristic.extractCandidates(allArticles.get(i).getDescription());
+                candidatesFrTitle = PreviousWordHeuristic.extractCandidates(allArticles.get(i).getTitle());
+                candidatesFrDescription = PreviousWordHeuristic.extractCandidates(allArticles.get(i).getDescription());
                 candidates.addAll(candidatesFrTitle);
                 candidates.addAll(candidatesFrDescription);
             }
@@ -84,7 +122,6 @@ public class App {
 
             List<NamedEntity> dictionaryEnt = JSONtoEntity.parseJsonEntity("src/data/dictionary.json");
 
-            System.out.println("Number of dictionary of elements : \n" + dictionaryEnt.size());
             //System.out.println(dictionaryEnt.get(0).getLabel());
             //dictionaryEnt.get(0).printKeywords(dictionaryEnt.get(0).getKeywords());
 
@@ -155,33 +192,33 @@ public class App {
             System.out.println("Category: ORGANIZATION");
 
             for (Map.Entry<String, Integer> orgElem : organizationEntities.entrySet()) {
-                System.out.println("    " + orgElem.getKey() + " (" + orgElem.getValue() + ")\n");
+                System.out.println("    " + orgElem.getKey() + " (" + orgElem.getValue() + ")");
             }
-
+            System.out.println();
             System.out.println("Category: LOCATION");
 
             for (Map.Entry<String, Integer> locElem : locationEntities.entrySet()) {
-                System.out.println("    " + locElem.getKey() + " (" + locElem.getValue() + ")\n");
+                System.out.println("    " + locElem.getKey() + " (" + locElem.getValue() + ")");
             }
-
+            System.out.println();
             System.out.println("Category: OTHER");
 
             for (Map.Entry<String, Integer> othElem : otherEntities.entrySet()) {
-                System.out.println("    " + othElem.getKey() + " (" + othElem.getValue() + ")\n");
+                System.out.println("    " + othElem.getKey() + " (" + othElem.getValue() + ")");
             }
-
+            System.out.println();
             System.out.println("Category: PERSON");
 
             for (Map.Entry<String, Integer> perElem : personEntities.entrySet()) {
-                System.out.println("    " + perElem.getKey() + " (" + perElem.getValue() + ")\n");
+                System.out.println("    " + perElem.getKey() + " (" + perElem.getValue() + ")");
             }
-
+            System.out.println();
             System.out.println("Category: EVENT");
 
             for (Map.Entry<String, Integer> evElem : eventEntities.entrySet()) {
-                System.out.println("    " + evElem.getKey() + " (" + evElem.getValue() + ")\n");
+                System.out.println("    " + evElem.getKey() + " (" + evElem.getValue() + ")");
             }
-
+            System.out.println();
         }
     }
 

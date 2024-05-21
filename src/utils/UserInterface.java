@@ -22,7 +22,9 @@ public class UserInterface {
     }
 
     public Config handleInput(String[] args) {
-
+        for(String arg : args){
+            System.out.println(arg);
+        }
         for (Integer i = 0; i < args.length; i++) {
             for (Option option : options) {
                 if (option.getName().equals(args[i]) || option.getLongName().equals(args[i])) {
@@ -31,6 +33,8 @@ public class UserInterface {
                     } else {
                         if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
                             optionDict.put(option.getName(), args[i + 1]);
+                            System.out.println("Nombre en el optionDict: " + option.getName());
+                            System.out.println(optionDict.get(option.getName()));
                             i++;
                         } else {
                             System.out.println("Invalid inputs");
@@ -44,9 +48,15 @@ public class UserInterface {
         Boolean printFeed = optionDict.containsKey("-pf");
         Boolean computeNamedEntities = optionDict.containsKey("-ne");
         // TODO: use value for heuristic config
-        
+        String heuristic = "";
+        if (computeNamedEntities){
+            heuristic = optionDict.get("-ne");
+        }
         String feedKey = optionDict.get("-f");
+        if(feedKey == null){
+           feedKey = "all";
+        }
 
-        return new Config(printFeed, computeNamedEntities, feedKey);
+        return new Config(printFeed, computeNamedEntities, feedKey, heuristic);
     }
 }
