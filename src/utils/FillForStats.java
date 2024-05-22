@@ -7,65 +7,28 @@ import java.util.List;
 
 public class FillForStats {
     //Creando la lista de categorias para luego imprimirlas
-    public static void categoryForStats(List<String> candidates, List<NamedEntity> dictionaryEnt, HashMap<String, Integer> locationCategory,
-                                    HashMap<String, Integer> personCategory, HashMap<String, Integer> organizationCategory, HashMap<String, Integer> otherCategory,
-                                    HashMap<String, Integer> eventCategory){
-
-        for (int i = 0; i < candidates.size(); i++) {
-
-            for (int j = 0; j < dictionaryEnt.size(); j++) {
-                NamedEntity actDictEnt = dictionaryEnt.get(j);
-                String actKey = actDictEnt.getLabel();
-                Integer actValue;
-                //System.out.println(actDictEnt.getLabel());
-                if(actDictEnt.containsKeyword(candidates.get(i))){
-                    switch (actDictEnt.getCategory()){
-                        case "LOCATION":
-                            if(locationCategory.containsKey(actDictEnt.getLabel())){
-                                actValue = locationCategory.get(actKey);
-                                locationCategory.replace(actKey, actValue, actValue+1);
-                            }else {
-                                locationCategory.put(actKey, 1);
-                            }
-                            break;
-                        case "ORGANIZATION":
-                            if(organizationCategory.containsKey(actDictEnt.getLabel())){
-                                actValue = organizationCategory.get(actKey);
-                                organizationCategory.replace(actKey, actValue, actValue+1);
-                            }else {
-                                organizationCategory.put(actKey, 1);
-                            }
-                            break;
-                        case "PERSON":
-                            if(personCategory.containsKey(actDictEnt.getLabel())){
-                                actValue = personCategory.get(actKey);
-                                personCategory.replace(actKey, actValue, actValue+1);
-                            }else {
-                                personCategory.put(actKey, 1);
-                            }
-                            break;
-                        case "EVENT":
-                            if(eventCategory.containsKey(actDictEnt.getLabel())){
-                                actValue = eventCategory.get(actKey);
-                                eventCategory.replace(actKey, actValue, actValue+1);
-                            }else {
-                                eventCategory.put(actKey, 1);
-                            }
-                            break;
-                        case "OTHER":
-                            if(otherCategory.containsKey(actDictEnt.getLabel())){
-                                actValue = otherCategory.get(actKey);
-                                otherCategory.replace(actKey, actValue, actValue+1);
-                            }else {
-                                otherCategory.put(actKey, 1);
-                            }
-
-                    }
+    public static HashMap<String, HashMap<NamedEntity, Integer>> categoryForStats(List<NamedEntity> allEntities){
+        HashMap<String, HashMap<NamedEntity, Integer>> orderByCat = new HashMap<>();
+        for (NamedEntity entity : allEntities) {
+            boolean existCat = orderByCat.containsKey(entity.getCategory());
+            if(existCat){
+                HashMap<NamedEntity, Integer> actValue = orderByCat.get(entity.getCategory());
+                //String actLabel = entity.getLabel();
+                if(actValue.containsKey(entity)){
+                    actValue.replace(entity, actValue.get(entity) + 1);
+                    orderByCat.replace(entity.getCategory(), actValue);
+                } else {
+                    actValue.put(entity, 1);
+                    orderByCat.put(entity.getCategory(), actValue);
                 }
+            } else {
+                HashMap<NamedEntity, Integer> newEntityCount = new HashMap<NamedEntity, Integer>();
+                newEntityCount.put(entity, 1);
+                orderByCat.putIfAbsent(entity.getCategory(), newEntityCount);
             }
-
         }
 
+        return orderByCat;
     }
 
     public static void topicsForStats(List<String> candidates, List<NamedEntity> dictionaryEnt, HashMap<String, Integer> politicsTopic,

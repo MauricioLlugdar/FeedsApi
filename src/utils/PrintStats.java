@@ -2,43 +2,22 @@ package utils;
 
 import java.util.HashMap;
 import java.util.Map;
+import namedEntities.*;
 
 public class PrintStats {
-    public static void printCategoryStats(HashMap<String, Integer> locationCategory, HashMap<String, Integer> personCategory, HashMap<String, Integer> organizationCategory,
-                                          HashMap<String, Integer> otherCategory, HashMap<String, Integer> eventCategory){
+    public static void printCategoryStats(HashMap<String, HashMap<NamedEntity, Integer>> categoryStats){
         //Ya creamos las listas con los nombres de cada candidato que existe en el dict separados por categoria
 
         //Ahora printeamos cada una de los categorias con la cantidad de apariciones de cada candidato
-        System.out.println("Category: ORGANIZATION");
 
-        for (Map.Entry<String, Integer> orgElem : organizationCategory.entrySet()) {
-            System.out.println("    " + orgElem.getKey() + " (" + orgElem.getValue() + ")");
-        }
-        System.out.println();
-        System.out.println("Category: LOCATION");
+        for (String category : categoryStats.keySet()){
+            System.out.println("Category: " + category);
+                for (NamedEntity elemEachCat : categoryStats.get(category).keySet()) {
+                    System.out.println("    " + elemEachCat.getLabel() + " (" + categoryStats.get(category).get(elemEachCat) + ")");
+                }
 
-        for (Map.Entry<String, Integer> locElem : locationCategory.entrySet()) {
-            System.out.println("    " + locElem.getKey() + " (" + locElem.getValue() + ")");
+            System.out.println();
         }
-        System.out.println();
-        System.out.println("Category: OTHER");
-
-        for (Map.Entry<String, Integer> othElem : otherCategory.entrySet()) {
-            System.out.println("    " + othElem.getKey() + " (" + othElem.getValue() + ")");
-        }
-        System.out.println();
-        System.out.println("Category: PERSON");
-
-        for (Map.Entry<String, Integer> perElem : personCategory.entrySet()) {
-            System.out.println("    " + perElem.getKey() + " (" + perElem.getValue() + ")");
-        }
-        System.out.println();
-        System.out.println("Category: EVENT");
-
-        for (Map.Entry<String, Integer> evElem : eventCategory.entrySet()) {
-            System.out.println("    " + evElem.getKey() + " (" + evElem.getValue() + ")");
-        }
-        System.out.println();
     }
 
     public static void printTopicsStats(HashMap<String, Integer> politicsTopic,

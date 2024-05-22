@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import feed.*;
-import namedEntities.NamedEntity;
+import namedEntities.*;
 import namedEntities.heuristics.*;
 import utils.*;
 
@@ -82,8 +82,6 @@ public class App {
                     System.out.println("NO ES HEURISTICA VALIDA");
                     System.exit(1);
             }
-
-            
             
             for (int i = 0; i < allArticles.size(); i++) {
                 candidatesFrTitle = actHeuristic.extractCandidates(allArticles.get(i).getTitle());
@@ -91,6 +89,7 @@ public class App {
                 candidates.addAll(candidatesFrTitle);
                 candidates.addAll(candidatesFrDescription);
             }
+
             System.out.println("Number of candidates of all Articles : \n" + candidates.size());
 
             for (String candidate : candidates){
@@ -103,13 +102,19 @@ public class App {
 
             List<NamedEntity> dictionaryEnt = JSONtoEntity.parseJsonEntity("src/data/dictionary.json");
 
+            List<NamedEntity> filterCandidates = JSONtoEntity.validCandidates(candidates, dictionaryEnt);
+
+            HashMap<String, HashMap<NamedEntity, Integer>> statsCategory = new HashMap<String, HashMap<NamedEntity, Integer> >();
+            /*
             //Divido por categorias
             HashMap<String, Integer> locationCategory = new HashMap<String, Integer>();
             HashMap<String, Integer> personCategory = new HashMap<String, Integer>();
             HashMap<String, Integer> organizationCategory = new HashMap<String, Integer>();
             HashMap<String, Integer> otherCategory = new HashMap<String, Integer>();
             HashMap<String, Integer> eventCategory = new HashMap<String, Integer>();
+
             //Divido por topicos
+             */
             HashMap<String, Integer> politicsTopic = new HashMap<String, Integer>();
             HashMap<String, Integer> sportsTopic = new HashMap<String, Integer>();
             HashMap<String, Integer> economyTopic = new HashMap<String, Integer>();
@@ -129,10 +134,10 @@ public class App {
                     break;
                 default:
                     //Filling category for Stats
-                    FillForStats.categoryForStats(candidates,dictionaryEnt,locationCategory,personCategory,organizationCategory,otherCategory,eventCategory);
+                    HashMap<String, HashMap<NamedEntity, Integer>> categoryStats = FillForStats.categoryForStats(filterCandidates);
 
                     //Printeamos las estadisticas por Categoria
-                    PrintStats.printCategoryStats(locationCategory,personCategory,organizationCategory,otherCategory,eventCategory);
+                    PrintStats.printCategoryStats(categoryStats);
                     break;
             }
 

@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import namedEntities.NamedEntity;
+import namedEntities.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -37,10 +37,33 @@ public class JSONtoEntity {
                 keywordsArray[j] = keywordsArrayJson.get(j).toString();
             }
 
-            entities.add(new NamedEntity(label, category, topicsArray, keywordsArray));
+            NamedEntity dictEntity = switch (category){
+                case "PERSON" -> new PERSON(label, topicsArray, keywordsArray, "", "", "");
+                case "LOCATION" -> new LOCATION(label, topicsArray, keywordsArray, "", "", "");
+                case "ORGANIZATION" -> new ORGANIZATION(label, topicsArray, keywordsArray, "", "");
+                case "EVENT" -> new EVENT(label, topicsArray, keywordsArray, "", "");
+                case "OTHER" -> new OTHER(label, topicsArray, keywordsArray, "");
+                    default -> null;
+            };
+            if(dictEntity != null){
+                entities.add(dictEntity);
+            }
+
         }
         return entities;
     }
 
+    static public List<NamedEntity> validCandidates(List<String> candidates, List<NamedEntity> dict){
+        List<NamedEntity> validCandidates = new ArrayList<>();
+        for (String actCand : candidates){
+            for(NamedEntity actDict : dict){
+                if(actDict.containsKeyword(actCand)){
+
+                    validCandidates.add(actDict);
+                }
+            }
+        }
+        return validCandidates;
+    }
 }
 
