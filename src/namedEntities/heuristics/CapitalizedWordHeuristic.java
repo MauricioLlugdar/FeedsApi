@@ -1,14 +1,10 @@
 package namedEntities.heuristics;
 
-import java.text.Normalizer;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import namedEntities.heuristics.FatherHeuristic;
 
-public class CapitalizedWordHeuristic {
-
-    public static List<String> extractCandidates(String text) {
+public class CapitalizedWordHeuristic extends FatherHeuristic {
+    @Override
+    public List<String> extractCandidates(String text) {
         List<String> candidates = new ArrayList<>();
 
         text = text.replaceAll("[-+.^:,\"]", "");

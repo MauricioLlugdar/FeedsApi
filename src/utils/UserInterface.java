@@ -6,7 +6,7 @@ import java.util.List;
 
 public class UserInterface {
 
-    private HashMap<String, String> optionDict;
+    private HashMap<String, String> optionDict;//Hashmap<String, String> optionDict.get("Cage") //Me devuelve Nico
 
     private List<Option> options;
 
@@ -41,12 +41,12 @@ public class UserInterface {
                 }
             }
         }
-
+        
         Boolean printFeed = optionDict.containsKey("-pf");
         Boolean computeNamedEntities = optionDict.containsKey("-ne");
 
         Boolean statsFormat = optionDict.containsKey("-sf");
-        // TODO: use value for heuristic config
+        
         String heuristic = "";
         if (computeNamedEntities){
             heuristic = optionDict.get("-ne");
@@ -58,7 +58,7 @@ public class UserInterface {
         //Actual stat format
         String sf = "cat";
         if(statsFormat){
-            sf = optionDict.get("-sf");
+            sf = optionDict.get("-sf"); // cat or topic
         }
 
         return new Config(printFeed, computeNamedEntities, feedKey, heuristic, sf);

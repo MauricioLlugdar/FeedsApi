@@ -1,13 +1,11 @@
 package namedEntities.heuristics;
 
-import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.*;
+import namedEntities.heuristics.FatherHeuristic;
 
-public class PreviousWordHeuristic {
+public class PreviousWordHeuristic extends FatherHeuristic {
     //Usando articulos conseguimos las palabras"
-    public static List<String> extractCandidates(String text) {
+    @Override
+    public List<String> extractCandidates(String text) {
         List<String> candidates = new ArrayList<>();
 
         text = text.replaceAll("[-+.^:,\"]", "");
@@ -18,7 +16,7 @@ public class PreviousWordHeuristic {
         // (ab*) "a" "ab" "abbbb" si existen
         // AZ
         //"(?<=\\b(?:a|ante|bajo|cabe|con|contra|de|desde|durante|en|entre|hacia|hasta|mediante|para|por|según|sin|so|sobre|tras|versus|vía))\\s+[A-Z][a-z]*\\b"
-        Pattern pattern = Pattern.compile("(?<=\\b(?:el|la|los|las|un|una|unos|unas|Sr|Sra|Dr|Dra|Prof))[A-Z][a-z]+(?:\\s[A-Z][a-z]+)*");
+        Pattern pattern = Pattern.compile("(?<=el\\b|la\\b|los\\b|las\\b|un\\b|una\\b|unos\\b|unas\\b|Sr\\b|Sra\\b|Dr\\b|Dra\\b|Prof\\b)\\s[A-Z][a-z]+(?:\\s[A-Z][a-z]+)*");
         //https://docs.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html ?: significa que no captura ese grupo, ya q no lo necesitamos realmente
         Matcher matcher = pattern.matcher(text);
 

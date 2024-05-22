@@ -4,8 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import feed.*;
 import namedEntities.NamedEntity;
-import namedEntities.heuristics.CapitalizedWordHeuristic;
-import namedEntities.heuristics.PreviousWordHeuristic;
+import namedEntities.heuristics.*;
 import utils.*;
 
 public class App {
@@ -37,7 +36,7 @@ public class App {
         List<Article> allArticles = new ArrayList<>();
         // TODO: Populate allArticles with articles from corresponding feeds
 
-        String feedKey = config.getFeedKey();
+        String feedKey = config.getFeedKey(); //lmnoti p12eco ...
         for (FeedsData feed : feedsDataArray) {
             if (feedKey.equals(feed.getLabel()) || feedKey.equals("all")) {
                 try {
@@ -59,16 +58,35 @@ public class App {
 
         if (config.getComputeNamedEntities()) {
             // TODO: complete the message with the selected heuristic name
-            System.out.println("Computing named entities using ");
-
+            System.out.println("Computing named entities using " + config.getHeuristic());
             // TODO: compute named entities using the selected heuristic
-
+            
             List<String> candidatesFrTitle;
             List<String> candidatesFrDescription;
             List<String> candidates = new ArrayList<>();
+            
+            FatherHeuristic actHeuristic;
+
+            switch(config.getHeuristic()){
+                case "Cap":
+                    actHeuristic = new CapitalizedWordHeuristic();
+                    break;
+                case "Prev":
+                    actHeuristic = new PreviousWordHeuristic();
+                    break;
+                case "Prep":
+                    actHeuristic = new PrepositionHeuristic();
+                    break;
+                default:
+                    System.out.println("NO ES HEURISTICA VALIDA");
+                    System.exit(1);
+            }
+
+            
+            
             for (int i = 0; i < allArticles.size(); i++) {
-                candidatesFrTitle = CapitalizedWordHeuristic.extractCandidates(allArticles.get(i).getTitle());
-                candidatesFrDescription = CapitalizedWordHeuristic.extractCandidates(allArticles.get(i).getDescription());
+                candidatesFrTitle = actHeuristic.extractCandidates(allArticles.get(i).getTitle());
+                candidatesFrDescription = actHeuristic.extractCandidates(allArticles.get(i).getDescription());
                 candidates.addAll(candidatesFrTitle);
                 candidates.addAll(candidatesFrDescription);
             }

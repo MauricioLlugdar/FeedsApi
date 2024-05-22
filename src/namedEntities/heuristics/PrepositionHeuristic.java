@@ -1,12 +1,14 @@
 package namedEntities.heuristics;
 
 import java.text.Normalizer;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.*;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class PrepositionHeuristic {
-    public static List<String> extractCandidates(String text) {
+public class PrepositionHeuristic extends FatherHeuristic {
+    @Override
+    public List<String> extractCandidates(String text) {
 
         //Si hay preposicion a, ante, bajo, cabe, ... . Y con esto al siguiente nombre propio lo detectamos como una palabra de interes
         List<String> candidates = new ArrayList<>();
