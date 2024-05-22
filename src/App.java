@@ -2,10 +2,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import feed.*;
 import namedEntities.NamedEntity;
+import namedEntities.heuristics.CapitalizedWordHeuristic;
 import namedEntities.heuristics.PreviousWordHeuristic;
 import utils.*;
 
@@ -37,57 +36,18 @@ public class App {
 
         List<Article> allArticles = new ArrayList<>();
         // TODO: Populate allArticles with articles from corresponding feeds
-        String feedUrl = "";
-        List<Article> articlesFeed;
-        Boolean fParam = true;
 
-        switch (config.getFeedKey()) {
-            case "p12pais":
+        String feedKey = config.getFeedKey();
+        for (FeedsData feed : feedsDataArray) {
+            if (feedKey.equals(feed.getLabel()) || feedKey.equals("all")) {
                 try {
-                    feedUrl = FeedParser.fetchFeed(feedsDataArray.get(0).getUrl());
+                    var xml = FeedParser.fetchFeed(feed.getUrl());
+                    allArticles.addAll(FeedParser.parseXML(xml));
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
+                    System.exit(1);
                 }
-                break;
-            case "p12eco":
-                try {
-                    feedUrl = FeedParser.fetchFeed(feedsDataArray.get(1).getUrl());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            case "lmgral:":
-                try {
-                    feedUrl = FeedParser.fetchFeed(feedsDataArray.get(2).getUrl());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            case "lmnoti":
-                try {
-                    feedUrl = FeedParser.fetchFeed(feedsDataArray.get(3).getUrl());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            case "all": //All feeds
-                fParam = false;
-                for (var i = 0; i < feedsDataArray.size(); ++i) {
-                    try {
-                        feedUrl = FeedParser.fetchFeed(feedsDataArray.get(i).getUrl());
-                        articlesFeed = FeedParser.parseXML(feedUrl);
-                        //Agrego todos los articulos de cada uno de los feeds en allArticles
-                        allArticles.addAll(articlesFeed);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                break;
-        }
-
-        if(fParam){
-            articlesFeed = FeedParser.parseXML(feedUrl);
-            //Agrego todos los articulos del feed en particular
-            allArticles.addAll(articlesFeed);
+            }
         }
 
         if (config.getPrintFeed()) {
@@ -107,12 +67,16 @@ public class App {
             List<String> candidatesFrDescription;
             List<String> candidates = new ArrayList<>();
             for (int i = 0; i < allArticles.size(); i++) {
-                candidatesFrTitle = PreviousWordHeuristic.extractCandidates(allArticles.get(i).getTitle());
-                candidatesFrDescription = PreviousWordHeuristic.extractCandidates(allArticles.get(i).getDescription());
+                candidatesFrTitle = CapitalizedWordHeuristic.extractCandidates(allArticles.get(i).getTitle());
+                candidatesFrDescription = CapitalizedWordHeuristic.extractCandidates(allArticles.get(i).getDescription());
                 candidates.addAll(candidatesFrTitle);
                 candidates.addAll(candidatesFrDescription);
             }
-            //System.out.println("Number of candidates of all Articles : \n" + candidates.size());
+            System.out.println("Number of candidates of all Articles : \n" + candidates.size());
+
+            for (String candidate : candidates){
+                System.out.println(candidate);
+            }
 
             // TODO: Print stats
             System.out.println("\nStats: ");

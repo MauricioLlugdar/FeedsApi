@@ -31,7 +31,7 @@ public class UserInterface {
                         if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
                             optionDict.put(option.getName(), args[i + 1]);
                             System.out.println("Nombre en el optionDict: " + option.getName());
-                            //System.out.println(optionDict.get(option.getName()));
+                            System.out.println(optionDict.get(option.getName()));
                             i++;
                         } else {
                             System.out.println("Invalid inputs");

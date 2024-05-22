@@ -15,7 +15,7 @@ public class JSONtoEntity {
 
     static public List<NamedEntity> parseJsonEntity(String jsonFilePath) throws IOException {
         String jsonData = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
-        List<NamedEntity> entity = new ArrayList<>();
+        List<NamedEntity> entities = new ArrayList<>();
 
         JSONArray jsonArray = new JSONArray(jsonData);
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -37,9 +37,9 @@ public class JSONtoEntity {
                 keywordsArray[j] = keywordsArrayJson.get(j).toString();
             }
 
-            entity.add(new NamedEntity(label, category, topicsArray, keywordsArray));
+            entities.add(new NamedEntity(label, category, topicsArray, keywordsArray));
         }
-        return entity;
+        return entities;
     }
 
 }
