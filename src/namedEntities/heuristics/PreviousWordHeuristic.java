@@ -1,8 +1,12 @@
 package namedEntities.heuristics;
 
-import namedEntities.heuristics.FatherHeuristic;
+import java.text.Normalizer;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class PreviousWordHeuristic extends FatherHeuristic {
+public class PreviousWordHeuristic implements FatherHeuristic {
     //Usando articulos conseguimos las palabras"
     @Override
     public List<String> extractCandidates(String text) {

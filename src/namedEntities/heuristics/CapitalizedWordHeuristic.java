@@ -1,8 +1,12 @@
 package namedEntities.heuristics;
 
-import namedEntities.heuristics.FatherHeuristic;
+import java.text.Normalizer;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class CapitalizedWordHeuristic extends FatherHeuristic {
+public class CapitalizedWordHeuristic implements FatherHeuristic {
     @Override
     public List<String> extractCandidates(String text) {
         List<String> candidates = new ArrayList<>();

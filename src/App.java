@@ -78,6 +78,7 @@ public class App {
                     actHeuristic = new PrepositionHeuristic();
                     break;
                 default:
+                    actHeuristic = new CapitalizedWordHeuristic();
                     System.out.println("NO ES HEURISTICA VALIDA");
                     System.exit(1);
             }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PrepositionHeuristic extends FatherHeuristic {
+public class PrepositionHeuristic implements FatherHeuristic {
     @Override
     public List<String> extractCandidates(String text) {
 
