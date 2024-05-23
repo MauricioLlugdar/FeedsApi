@@ -104,7 +104,6 @@ public class App {
 
             List<NamedEntity> filterCandidates = JSONtoEntity.validCandidates(candidates, dictionaryEnt);
 
-            HashMap<String, HashMap<NamedEntity, Integer>> statsCategory = new HashMap<String, HashMap<NamedEntity, Integer> >();
             /*
             //Divido por categorias
             HashMap<String, Integer> locationCategory = new HashMap<String, Integer>();
@@ -115,6 +114,7 @@ public class App {
 
             //Divido por topicos
              */
+            /*
             HashMap<String, Integer> politicsTopic = new HashMap<String, Integer>();
             HashMap<String, Integer> sportsTopic = new HashMap<String, Integer>();
             HashMap<String, Integer> economyTopic = new HashMap<String, Integer>();
@@ -122,23 +122,26 @@ public class App {
             HashMap<String, Integer> technoTopic = new HashMap<String, Integer>();
             HashMap<String, Integer> cultureTopic = new HashMap<String, Integer>();
             HashMap<String, Integer> otherTopic = new HashMap<String, Integer>();
-
+            */
             String orderOfStats = config.getStatFormat();
+            System.out.println("Computing stats using: " + orderOfStats);
+            System.out.println("-".repeat(80));
 
             switch (orderOfStats){
-                case "topic":
-                    FillForStats.topicsForStats(candidates, dictionaryEnt, politicsTopic, sportsTopic, economyTopic, healthTopic, technoTopic, cultureTopic, otherTopic);
-
-                    //Printeamos las estadisticas por Topico
-                    PrintStats.printTopicsStats(politicsTopic, sportsTopic, economyTopic, healthTopic, technoTopic, cultureTopic, otherTopic);
+                case "Topic":
+                    HashMap<String, HashMap<NamedEntity, Integer>> statsTopic = new HashMap<String, HashMap<NamedEntity, Integer> >();
+                    statsTopic = FillForStats.topicForStats(filterCandidates);
+                    PrintStats.printTopicsStats(statsTopic);
+                    break;
+                case "Cat":
+                    HashMap<String, HashMap<NamedEntity, Integer>> statsCategory = new HashMap<String, HashMap<NamedEntity, Integer> >();
+                    statsCategory = FillForStats.categoryForStats(filterCandidates);
+                    PrintStats.printCategoryStats(statsCategory);
                     break;
                 default:
-                    //Filling category for Stats
-                    HashMap<String, HashMap<NamedEntity, Integer>> categoryStats = FillForStats.categoryForStats(filterCandidates);
+                    System.out.println("NO ES ESTADÍSTICA VÁLIDO");
+                    System.exit(1);
 
-                    //Printeamos las estadisticas por Categoria
-                    PrintStats.printCategoryStats(categoryStats);
-                    break;
             }
 
 

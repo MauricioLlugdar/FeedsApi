@@ -56,7 +56,7 @@ public class UserInterface {
            feedKey = "all";
         }
         //Actual stat format
-        String sf = "cat";
+        String sf = "Cat";
         if(statsFormat){
             sf = optionDict.get("-sf"); // cat or topic
         }
