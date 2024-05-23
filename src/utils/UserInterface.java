@@ -41,8 +41,10 @@ public class UserInterface {
                 }
             }
         }
-        
+        Boolean printHelp = optionDict.containsKey("-h");
+
         Boolean printFeed = optionDict.containsKey("-pf");
+
         Boolean computeNamedEntities = optionDict.containsKey("-ne");
 
         Boolean statsFormat = optionDict.containsKey("-sf");
@@ -61,6 +63,6 @@ public class UserInterface {
             sf = optionDict.get("-sf"); // cat or topic
         }
 
-        return new Config(printFeed, computeNamedEntities, feedKey, heuristic, sf);
+        return new Config(printHelp, printFeed, computeNamedEntities, feedKey, heuristic, sf);
     }
 }

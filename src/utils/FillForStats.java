@@ -5,6 +5,15 @@ import namedEntities.NamedEntity;
 import java.util.HashMap;
 import java.util.List;
 
+/*
+(Persona (Milei, 2))
+         (Messi, 1))
+         
+ Lugar   (Madrid, 2))
+         (Cordoba, 1))
+
+*/
+
 public class FillForStats {
     //Creando la lista de categorias para luego imprimirlas
     public static HashMap<String, HashMap<NamedEntity, Integer>> categoryForStats(List<NamedEntity> allEntities){
