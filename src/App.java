@@ -103,26 +103,7 @@ public class App {
             List<NamedEntity> dictionaryEnt = JSONtoEntity.parseJsonEntity("src/data/dictionary.json");
 
             List<NamedEntity> filterCandidates = JSONtoEntity.validCandidates(candidates, dictionaryEnt);
-
-            /*
-            //Divido por categorias
-            HashMap<String, Integer> locationCategory = new HashMap<String, Integer>();
-            HashMap<String, Integer> personCategory = new HashMap<String, Integer>();
-            HashMap<String, Integer> organizationCategory = new HashMap<String, Integer>();
-            HashMap<String, Integer> otherCategory = new HashMap<String, Integer>();
-            HashMap<String, Integer> eventCategory = new HashMap<String, Integer>();
-
-            //Divido por topicos
-             */
-            /*
-            HashMap<String, Integer> politicsTopic = new HashMap<String, Integer>();
-            HashMap<String, Integer> sportsTopic = new HashMap<String, Integer>();
-            HashMap<String, Integer> economyTopic = new HashMap<String, Integer>();
-            HashMap<String, Integer> healthTopic = new HashMap<String, Integer>();
-            HashMap<String, Integer> technoTopic = new HashMap<String, Integer>();
-            HashMap<String, Integer> cultureTopic = new HashMap<String, Integer>();
-            HashMap<String, Integer> otherTopic = new HashMap<String, Integer>();
-            */
+            
             String orderOfStats = config.getStatFormat();
             System.out.println("Computing stats using: " + orderOfStats);
             System.out.println("-".repeat(80));
@@ -141,10 +122,7 @@ public class App {
                 default:
                     System.out.println("NO ES ESTADÍSTICA VÁLIDO");
                     System.exit(1);
-
             }
-
-
         }
     }
 
