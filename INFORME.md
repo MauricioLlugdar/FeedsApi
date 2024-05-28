@@ -58,5 +58,5 @@ IAPrevWordHeuristic: Utiliza una lista de palabras comunes que suelen preceder a
 PrepositionHeuristic: Similar a la anterior, pero se enfoca específicamente en las preposiciones como indicadores de nombres propios. Busca preposiciones comunes seguidas de palabras capitalizadas en el texto.
 
 # 4. Extras
-Completar si hacen algo. 
+Aca quisieramos aclarar como en el Lab1 que estuvimos trabajando en su gran mayoria en live Share de visual studio code los 3 integrantes del grupo, hablando tanto como por un grupo de whatsaAp como por discord. Por lo tanto se notara la diferencia de commits (pues siempre los hacia el dueño de live share). Pero garantizamos que trabajamos y entendimos los 3 este lab:)
 
