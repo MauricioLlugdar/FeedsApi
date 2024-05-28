@@ -50,7 +50,7 @@ public class Printable {
         System.out.println("                                       Available heuristic names are: ");
         System.out.println("                                       Cap: Capitalized Words");
         System.out.println("                                       Prep: Capitalized words that have a preposition right before");
-        System.out.println("                                       Prev: A DEFINIR");
+        System.out.println("                                       IA: Capitalized words chosen statiscally by an IA");
         // TODO: Print the available heuristics with the following format
         System.out.println("  -pf, --print-feed:                   Print the fetched feed");
         System.out.println("  -sf, --stats-format <format>:        Print the stats in the specified format");
