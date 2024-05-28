@@ -52,6 +52,8 @@ public class UserInterface {
         String heuristic = "";
         if (computeNamedEntities){
             heuristic = optionDict.get("-ne");
+        } else {
+            printFeed = true;
         }
         String feedKey = optionDict.get("-f");
         if(feedKey == null){
@@ -66,3 +68,5 @@ public class UserInterface {
         return new Config(printHelp, printFeed, computeNamedEntities, feedKey, heuristic, sf);
     }
 }
+
+

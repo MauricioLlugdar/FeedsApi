@@ -25,35 +25,12 @@ public class App {
         run(config, feedsDataArray);
     }
 
-    private static void printHelp(List<FeedsData> feedsDataArray) {
-        System.out.println("Usage: make run ARGS=\"[OPTION]\"");
-        System.out.println("Options:");
-        System.out.println("  -h, --help: Show this help message and exit");
-        System.out.println("  -f, --feed <feedKey>:                Fetch and process the feed with");
-        System.out.println("                                       the specified key");
-        System.out.println("                                       Available feed keys are: ");
-        for (FeedsData feedData : feedsDataArray) {
-            System.out.println("                                       " + feedData.getLabel());
-        }
-        System.out.println("  -ne, --named-entity <heuristicName>: Use the specified heuristic to extract");
-        System.out.println("                                       named entities");
-        System.out.println("                                       Available heuristic names are: ");
-        System.out.println("                                       Cap: Capitalized Words");
-        System.out.println("                                       Prep: Capitalized words that have a preposition right before");
-        System.out.println("                                       Prev: A DEFINIR");
-        // TODO: Print the available heuristics with the following format
-        System.out.println("  -pf, --print-feed:                   Print the fetched feed");
-        System.out.println("  -sf, --stats-format <format>:        Print the stats in the specified format");
-        System.out.println("                                       Available formats are: ");
-        System.out.println("                                       Cat: Category-wise stats");
-        System.out.println("                                       Topic: Topic-wise stats");
-    }
-
     // TODO: Change the signature of this function if needed
     private static void run(Config config, List<FeedsData> feedsDataArray) throws IOException {
 
         if (config.getPrintHelp()){
-            printHelp(feedsDataArray);
+            Printable.printHelp(feedsDataArray);
+            System.exit(0);
         }
 
         if (feedsDataArray == null || feedsDataArray.size() == 0) {
@@ -99,8 +76,8 @@ public class App {
                 case "Cap":
                     actHeuristic = new CapitalizedWordHeuristic();
                     break;
-                case "Prev":
-                    actHeuristic = new PreviousWordHeuristic();
+                case "IA":
+                    actHeuristic = new IAPrevWordHeuristic();
                     break;
                 case "Prep":
                     actHeuristic = new PrepositionHeuristic();
@@ -108,7 +85,8 @@ public class App {
                 default:
                     actHeuristic = new CapitalizedWordHeuristic();
                     System.out.println("NO ES HEURISTICA VALIDA");
-                    System.exit(1);
+                    Printable.printHelp(feedsDataArray);
+                    System.exit(0);
             }
             
             for (int i = 0; i < allArticles.size(); i++) {
@@ -140,12 +118,12 @@ public class App {
                 case "Topic":
                     HashMap<String, HashMap<NamedEntity, Integer>> statsTopic = new HashMap<String, HashMap<NamedEntity, Integer> >();
                     statsTopic = FillForStats.topicForStats(filterCandidates);
-                    PrintStats.printTopicsStats(statsTopic);
+                    Printable.printTopicsStats(statsTopic);
                     break;
                 case "Cat":
                     HashMap<String, HashMap<NamedEntity, Integer>> statsCategory = new HashMap<String, HashMap<NamedEntity, Integer> >();
                     statsCategory = FillForStats.categoryForStats(filterCandidates);
-                    PrintStats.printCategoryStats(statsCategory);
+                    Printable.printCategoryStats(statsCategory);
                     break;
                 default:
                     System.out.println("NO ES ESTADÍSTICA VÁLIDO");
